@@ -2,8 +2,12 @@ import { View } from "react-native";
 import { Text } from "../components";
 import { Button } from "../components/Button";
 import { Box } from "../components/Box";
+import { Select } from "../components/Select";
+import { useState } from "react";
+import { Input } from "../components/Input";
 
 export const HomeScreen = () => {
+  const [selected, setSelected] = useState<boolean>(false);
   return (
     <View
       style={{
@@ -20,6 +24,18 @@ export const HomeScreen = () => {
 
         <Button text="Label" variant="outline" />
         <Button text="Label" icon="pincel-simple-line" variant="outline" />
+
+        <Select
+          selected={selected}
+          onPress={() => setSelected((s) => !s)}
+          option={{
+            id: "1",
+            label: "Sim",
+            value: "sim",
+          }}
+        />
+
+        <Input label="Label" />
       </Box>
     </View>
   );
