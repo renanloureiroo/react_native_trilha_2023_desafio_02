@@ -54,6 +54,9 @@ export const Screen = (props: ScreenProps) => {
           keyboardShouldPersistTaps="handled"
           scrollEnabled
           {...rest}
+          style={{
+            flex: 1,
+          }}
         >
           {children}
         </Box>

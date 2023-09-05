@@ -53,8 +53,8 @@ export const Icon: FC<IconProps> = (props) => {
               $overrideStyles,
             ]}
             resizeMode="contain"
-            width={width ?? size}
-            height={height ?? size}
+            width={width || size}
+            height={height || size}
             source={icons[name]}
           />
         )}
@@ -69,8 +69,8 @@ export const Icon: FC<IconProps> = (props) => {
         $overrideStyles,
       ]}
       resizeMode="contain"
-      width={width ?? size}
-      height={height ?? size}
+      width={width || size}
+      height={height || size}
       source={icons[name]}
     />
   );

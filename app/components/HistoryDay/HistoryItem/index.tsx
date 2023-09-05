@@ -5,13 +5,17 @@ import * as Styled from "./styles";
 import { Text } from "../../Text";
 
 interface HistoryItemProps {
-  hour: string;
-  title: string;
-  isPositive?: boolean;
+  data: {
+    hour: string;
+    title: string;
+    isPositive?: boolean;
+  };
 }
 
 export const HistoryItem: FC<HistoryItemProps> = (props) => {
-  const { hour, title, isPositive = false } = props;
+  const {
+    data: { hour, title, isPositive = false },
+  } = props;
   return (
     <Styled.Root>
       <Text text={hour} />
