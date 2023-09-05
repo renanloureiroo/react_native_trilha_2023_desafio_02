@@ -3,6 +3,7 @@ import * as Styled from "./styles";
 import { FC } from "react";
 import { Icon, Icons } from "../Icon";
 import { Text } from "../Text";
+import { Box } from "../Box";
 
 interface ButtonProps extends PressableProps {
   text: string;
@@ -14,7 +15,7 @@ interface ButtonProps extends PressableProps {
 export const Button: FC<ButtonProps> = (props) => {
   const { text, icon, variant = "fill", fullWidth = false } = props;
   return (
-    <Styled.Root>
+    <Styled.Root fullWidth={fullWidth}>
       {({ pressed }) => (
         <Styled.Container
           pressed={pressed}
@@ -28,6 +29,7 @@ export const Button: FC<ButtonProps> = (props) => {
               color={variant === "fill" ? "neutral-900" : "neutral-100"}
             />
           )}
+
           <Styled.Label text={text} size="md" variant={variant} weight="bold" />
         </Styled.Container>
       )}

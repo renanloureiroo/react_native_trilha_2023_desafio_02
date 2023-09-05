@@ -5,6 +5,7 @@ import { useFonts } from "../shared/hooks/useFonts";
 import * as SplashScreen from "expo-splash-screen";
 import { ThemeProvider } from "styled-components/native";
 import { theme } from "../shared/theme";
+import { SafeAreaProvider } from "react-native-safe-area-context";
 
 export const AppNavigator = () => {
   const fontsLoaded = useFonts({
@@ -16,10 +17,12 @@ export const AppNavigator = () => {
   }
 
   return (
-    <ThemeProvider theme={theme}>
-      <NavigationContainer>
-        <AppStack />
-      </NavigationContainer>
-    </ThemeProvider>
+    <SafeAreaProvider>
+      <ThemeProvider theme={theme}>
+        <NavigationContainer>
+          <AppStack />
+        </NavigationContainer>
+      </ThemeProvider>
+    </SafeAreaProvider>
   );
 };

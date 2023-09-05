@@ -11,7 +11,13 @@ export interface ContainerProps
 export const Container = styled.View<ContainerProps>`
   ${({ bg, borderColor, theme }) => css`
     background-color: ${bg ? theme.colors[bg] : "transparent"};
+    border-color: ${borderColor ? theme.colors[borderColor] : "transparent"};
+  `}
+`;
 
+export const ScrollContainer = styled.ScrollView<ContainerProps>`
+  ${({ bg, borderColor, theme }) => css`
+    background-color: ${bg ? theme.colors[bg] : "transparent"};
     border-color: ${borderColor ? theme.colors[borderColor] : "transparent"};
   `}
 `;

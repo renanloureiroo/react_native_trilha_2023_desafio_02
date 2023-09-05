@@ -29,7 +29,7 @@ export const Select: FC<SelectProps> = (props) => {
   const top = useSharedValue(0);
   const left = useSharedValue(0);
 
-  const { colors } = useTheme();
+  const { colors, timing } = useTheme();
 
   const animatedStyles = useAnimatedStyle(() => {
     return {
@@ -37,7 +37,7 @@ export const Select: FC<SelectProps> = (props) => {
       height: size.value,
       top: top.value,
       left: left.value,
-      backgroundColor: theme.colors["primary-100"],
+      backgroundColor: colors["primary-100"],
     };
   }, []);
 
@@ -47,37 +47,24 @@ export const Select: FC<SelectProps> = (props) => {
       height: size.value,
       top: top.value,
       left: left.value,
-      backgroundColor: theme.colors["primary-300"],
+      backgroundColor: colors["primary-300"],
     };
   });
 
+  const animationConfig = {
+    duration: timing.quick,
+    easing: Easing.quad,
+  };
+
   useEffect(() => {
     if (selected) {
-      size.value = withTiming(400, {
-        duration: 300,
-        easing: Easing.linear,
-      });
-      top.value = withTiming(-200, {
-        duration: 300,
-        easing: Easing.linear,
-      });
-      left.value = withTiming(-200, {
-        duration: 300,
-        easing: Easing.linear,
-      });
+      size.value = withTiming(400, animationConfig);
+      top.value = withTiming(-200, animationConfig);
+      left.value = withTiming(-200, animationConfig);
     } else {
-      size.value = withTiming(0, {
-        duration: 300,
-        easing: Easing.inOut(Easing.ease),
-      });
-      top.value = withTiming(0, {
-        duration: 300,
-        easing: Easing.inOut(Easing.ease),
-      });
-      left.value = withTiming(0, {
-        duration: 300,
-        easing: Easing.inOut(Easing.ease),
-      });
+      size.value = withTiming(0, animationConfig);
+      top.value = withTiming(0, animationConfig);
+      left.value = withTiming(0, animationConfig);
     }
   }, [selected]);
 

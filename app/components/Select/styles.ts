@@ -17,11 +17,7 @@ export const Root = styled.Pressable<RootProps>`
     padding: 1px;
     min-height: 50px;
     width: 159px;
-    background-color: ${selected
-      ? type === "primary"
-        ? theme.colors["primary-300"]
-        : theme.colors["secondary-300"]
-      : theme.colors["neutral-600"]};
+    background-color: ${theme.colors["neutral-600"]};
     align-items: center;
     justify-content: center;
     border-radius: 6px;

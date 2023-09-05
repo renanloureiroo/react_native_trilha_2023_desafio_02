@@ -1,5 +1,6 @@
 import { css, styled } from "styled-components/native";
-import { Box, Text } from "../";
+import { Text } from "../Text";
+import { Box } from "../Box";
 import { TextInput } from "react-native";
 
 interface ContainerProps {
@@ -27,7 +28,7 @@ export const Container = styled(Box)<ContainerProps>`
   `}
 `;
 
-export const Input = styled(TextInput)`
+export const InputField = styled(TextInput)`
   background-color: transparent;
   flex: 1;
   padding: 0px;
@@ -35,7 +36,6 @@ export const Input = styled(TextInput)`
   ${({ theme }) => css`
     font-family: ${theme.typography.primary.regular};
     font-size: ${theme.typography.fontSizes["x-md"]};
-    line-height: 16px;
-    height: 16px;
+    vertical-align: middle;
   `}
 `;

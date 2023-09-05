@@ -1,6 +1,5 @@
 import {
-  FC,
-  ForwardRefRenderFunction,
+  Ref,
   forwardRef,
   useEffect,
   useImperativeHandle,
@@ -15,7 +14,7 @@ interface InputProps extends TextInputProps {
   label?: string;
 }
 
-const Base: ForwardRefRenderFunction<TextInput, InputProps> = (props, ref) => {
+export const Input = forwardRef((props: InputProps, ref: Ref<TextInput>) => {
   const { autoFocus, label, ...rest } = props;
 
   const [isFocused, setIsFocused] = useState<boolean>(false);
@@ -45,7 +44,7 @@ const Base: ForwardRefRenderFunction<TextInput, InputProps> = (props, ref) => {
     <Styled.Root onPress={handleFocus}>
       <Styled.Label text={label} />
       <Styled.Container isFocused={isFocused}>
-        <Styled.Input
+        <Styled.InputField
           ref={inputRef}
           {...rest}
           selectionColor={colors["neutral-100"]}
@@ -61,6 +60,4 @@ const Base: ForwardRefRenderFunction<TextInput, InputProps> = (props, ref) => {
       </Styled.Container>
     </Styled.Root>
   );
-};
-
-export const Input = forwardRef(Base);
+});

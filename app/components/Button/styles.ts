@@ -2,7 +2,12 @@ import { css, styled } from "styled-components/native";
 import { theme } from "../../shared/theme";
 import { Pressable } from "react-native";
 import { Text } from "../Text";
+import { Box } from "../Box";
 type Variant = "fill" | "outline";
+
+interface RootProps {
+  fullWidth: boolean;
+}
 
 interface ButtonProps {
   fullWidth: boolean;
@@ -14,19 +19,20 @@ interface ButtonLabelProps {
   variant: Variant;
 }
 
-export const Root = styled(Pressable).attrs({
+export const Root = styled(Pressable).attrs<RootProps>({
   android_ripple: {
     color: "rbga(0,0,0,0.2)",
     foreground: true,
   },
 })`
-  ${() => css`
+  ${({ fullWidth }) => css`
     border-radius: 6px;
     overflow: hidden;
+    width: ${fullWidth ? "100%" : "auto"};
   `}
 `;
 
-export const Container = styled.View<ButtonProps>`
+export const Container = styled(Box)<ButtonProps>`
   ${({ theme, fullWidth, pressed, variant }) => css`
     flex-direction: row;
     justify-content: center;
@@ -35,7 +41,7 @@ export const Container = styled.View<ButtonProps>`
     padding: ${theme.spacing[4]}px ${theme.spacing[6]}px;
     width: ${fullWidth ? "100%" : "auto"};
     min-width: 114px;
-    min-height: 50px;
+    height: 50px;
     border-radius: 6px;
     background-color: ${pressed
       ? variant === "fill"
