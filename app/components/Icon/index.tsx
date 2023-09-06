@@ -42,7 +42,7 @@ export const Icon: FC<IconProps> = (props) => {
           foreground: true,
         }}
       >
-        {({ pressed }) => (
+        {({ pressed }: { pressed: boolean }) => (
           <Styled.ImageIcon
             {...rest}
             style={[

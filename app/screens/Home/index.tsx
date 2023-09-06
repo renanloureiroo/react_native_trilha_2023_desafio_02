@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useCallback } from "react";
 
 import * as Styled from "./styles";
 import { Header } from "../../components/Header";
@@ -16,6 +16,7 @@ import {
   NativeStackNavigatorProps,
 } from "@react-navigation/native-stack/lib/typescript/src/types";
 import { AppStackParamList } from "../../navigator/AppStack";
+import { storage } from "../../shared/services/storage";
 
 const data: Styled.ItemProps[] = [
   {
@@ -77,9 +78,18 @@ export const HomeScreen = () => {
   const { navigate } =
     useNavigation<NativeStackNavigationProp<AppStackParamList, "Home">>();
 
-  const handleNavigateForNewRegister = () => {
+  const handleNavigateForNewRegister = useCallback(() => {
     navigate("ResgisterStack", { screen: "Register" });
-  };
+  }, []);
+
+  useEffect(() => {
+    const fetch = async () => {
+      const value = await storage.get("@diet:registers");
+      console.log(value);
+    };
+
+    fetch();
+  }, []);
   return (
     <Screen paddingHorizontal={24} justifyContent="flex-start">
       <Box marginTop={16} marginBottom={24}>
