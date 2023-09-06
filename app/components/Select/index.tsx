@@ -1,4 +1,4 @@
-import { FC, useEffect } from "react";
+import { FC, useEffect, useState } from "react";
 import * as Styled from "./styles";
 
 import {
@@ -37,7 +37,8 @@ export const Select: FC<SelectProps> = (props) => {
       height: size.value,
       top: top.value,
       left: left.value,
-      backgroundColor: colors["primary-100"],
+      backgroundColor:
+        type === "primary" ? colors["primary-100"] : colors["secondary-100"],
     };
   }, []);
 
@@ -47,7 +48,8 @@ export const Select: FC<SelectProps> = (props) => {
       height: size.value,
       top: top.value,
       left: left.value,
-      backgroundColor: colors["primary-300"],
+      backgroundColor:
+        type === "primary" ? colors["primary-300"] : colors["secondary-300"],
     };
   });
 

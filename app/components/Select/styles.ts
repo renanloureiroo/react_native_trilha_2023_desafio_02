@@ -15,8 +15,9 @@ interface BalletProps {
 export const Root = styled.Pressable<RootProps>`
   ${({ theme, selected, type }) => css`
     padding: 1px;
-    min-height: 50px;
-    width: 159px;
+    height: 50px;
+    min-width: 159px;
+    flex: 1;
     background-color: ${theme.colors["neutral-600"]};
     align-items: center;
     justify-content: center;
@@ -29,7 +30,7 @@ export const Root = styled.Pressable<RootProps>`
 export const Content = styled.View<RootProps>`
   ${({ theme, selected }) => css`
     flex: 1;
-    width: 157px;
+    width: 100%;
     height: 48px;
     background-color: ${theme.colors["neutral-600"]};
     justify-content: center;

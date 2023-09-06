@@ -9,6 +9,13 @@ import { Box } from "../../components/Box";
 import { Banner } from "../../components/Banner";
 import { HistoryDay } from "../../components/HistoryDay";
 import { FlatList, View } from "react-native";
+import { useSafeArea } from "../../shared/hooks/useSafeArea";
+import { NavigationProp, useNavigation } from "@react-navigation/native";
+import {
+  NativeStackNavigationProp,
+  NativeStackNavigatorProps,
+} from "@react-navigation/native-stack/lib/typescript/src/types";
+import { AppStackParamList } from "../../navigator/AppStack";
 
 const data: Styled.ItemProps[] = [
   {
@@ -65,7 +72,14 @@ const data: Styled.ItemProps[] = [
 ];
 
 export const HomeScreen = () => {
-  const [selected, setSelected] = useState<boolean>(false);
+  const { bottom } = useSafeArea();
+
+  const { navigate } =
+    useNavigation<NativeStackNavigationProp<AppStackParamList, "Home">>();
+
+  const handleNavigateForNewRegister = () => {
+    navigate("ResgisterStack", { screen: "Register" });
+  };
   return (
     <Screen paddingHorizontal={24} justifyContent="flex-start">
       <Box marginTop={16} marginBottom={24}>
@@ -76,11 +90,19 @@ export const HomeScreen = () => {
       </Box>
       <Box marginBottom={32} gap={4}>
         <Text text="Refeições" size="x-md" weight="bold" color="neutral-100" />
-        <Button text="Nova refeição" icon="plus" fullWidth />
+        <Button
+          text="Nova refeição"
+          icon="plus"
+          fullWidth
+          onPress={handleNavigateForNewRegister}
+        />
       </Box>
 
       <Styled.List
         data={data}
+        contentContainerStyle={{
+          paddingBottom: bottom,
+        }}
         renderItem={({ item }) => (
           <HistoryDay date={item.date} history={item.history} />
         )}

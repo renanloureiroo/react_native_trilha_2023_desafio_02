@@ -26,7 +26,7 @@ export const Header: FC<HeaderProps> = (props) => {
       <Box position="absolute" left={0} zIndex={1}>
         <Icon
           name="arrow-left"
-          color="neutral-100"
+          color="neutral-200"
           size={24}
           onPressAction={() => console.log("Back")}
         />

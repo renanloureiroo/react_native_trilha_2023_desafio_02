@@ -5,6 +5,7 @@ import { Theme } from "../../shared/theme";
 
 import * as Styled from "./styles";
 import { StatusBar } from "expo-status-bar";
+import { useTheme } from "styled-components/native";
 
 interface ScreenProps extends BoxProps, ScrollViewProps {
   scroll?: boolean;
@@ -19,10 +20,12 @@ export const Screen = (props: ScreenProps) => {
     children,
     safeAreaEdges = ["top"],
     statusBarStyle = "dark",
+    backgroundColor = "neutral-900",
     ...rest
   } = props;
   const isIos = Platform.OS === "ios";
   const safeAreas = useSafeArea();
+  const { colors } = useTheme();
   const safeAreaStyle = safeAreaEdges.reduce(
     (acc, edge) => {
       const edgeValue = safeAreas[edge];
@@ -41,7 +44,14 @@ export const Screen = (props: ScreenProps) => {
   );
 
   return (
-    <Styled.Root style={[safeAreaStyle]}>
+    <Styled.Root
+      style={[
+        safeAreaStyle,
+        {
+          backgroundColor: colors[backgroundColor],
+        },
+      ]}
+    >
       <Styled.Keyboard behavior={isIos ? "padding" : undefined}>
         <StatusBar
           style={statusBarStyle}

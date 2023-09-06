@@ -12,10 +12,17 @@ import { useTheme } from "styled-components/native";
 
 interface InputProps extends TextInputProps {
   label?: string;
+  multilineHeight?: number;
 }
 
 export const Input = forwardRef((props: InputProps, ref: Ref<TextInput>) => {
-  const { autoFocus, label, ...rest } = props;
+  const {
+    autoFocus,
+    label,
+    multiline = false,
+    multilineHeight = 120,
+    ...rest
+  } = props;
 
   const [isFocused, setIsFocused] = useState<boolean>(false);
   const inputRef = useRef<TextInput>(null);
@@ -42,8 +49,12 @@ export const Input = forwardRef((props: InputProps, ref: Ref<TextInput>) => {
 
   return (
     <Styled.Root onPress={handleFocus}>
-      <Styled.Label text={label} />
-      <Styled.Container isFocused={isFocused}>
+      <Styled.Label text={label} weight="bold" size="md" color="neutral-200" />
+      <Styled.Container
+        isFocused={isFocused}
+        multiline={multiline}
+        multilineHeight={multilineHeight}
+      >
         <Styled.InputField
           ref={inputRef}
           {...rest}
@@ -56,6 +67,7 @@ export const Input = forwardRef((props: InputProps, ref: Ref<TextInput>) => {
             setIsFocused(false);
             rest.onBlur?.(e);
           }}
+          multiline={multiline}
         />
       </Styled.Container>
     </Styled.Root>

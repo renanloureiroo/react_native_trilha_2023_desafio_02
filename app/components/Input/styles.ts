@@ -5,6 +5,8 @@ import { TextInput } from "react-native";
 
 interface ContainerProps {
   isFocused: boolean;
+  multiline: boolean;
+  multilineHeight: number;
 }
 
 export const Root = styled.Pressable``;
@@ -16,15 +18,17 @@ export const Label = styled(Text)`
 `;
 
 export const Container = styled(Box)<ContainerProps>`
-  ${({ theme, isFocused }) => css`
+  ${({ theme, isFocused, multiline, multilineHeight }) => css`
     padding: 14px;
+    width: 100%;
     border-radius: 6px;
     border-width: 1px;
     border-color: ${theme.colors[isFocused ? "neutral-300" : "neutral-500"]};
     background-color: ${theme.colors["neutral-900"]};
     flex-direction: row;
-    align-items: center;
-    height: 48px;
+    align-items: ${multiline ? "flex-start" : "center"};
+    height: ${multiline ? multilineHeight : 48}px;
+    min-height: ${multiline ? multilineHeight : 48}px;
   `}
 `;
 

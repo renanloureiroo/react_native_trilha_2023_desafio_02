@@ -15,7 +15,7 @@ export const Root = styled(Box)`
     flex-direction: row;
     gap: ${theme.spacing[3]}px;
     align-items: center;
-    width: "100%";
+    width: 100%;
     padding: ${theme.spacing[3]}px;
   `}
 `;

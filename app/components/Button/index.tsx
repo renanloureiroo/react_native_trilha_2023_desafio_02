@@ -13,9 +13,9 @@ interface ButtonProps extends PressableProps {
 }
 
 export const Button: FC<ButtonProps> = (props) => {
-  const { text, icon, variant = "fill", fullWidth = false } = props;
+  const { text, icon, variant = "fill", fullWidth = false, ...rest } = props;
   return (
-    <Styled.Root fullWidth={fullWidth}>
+    <Styled.Root fullWidth={fullWidth} {...rest}>
       {({ pressed }) => (
         <Styled.Container
           pressed={pressed}
