@@ -163,6 +163,9 @@ export const RegisterScreen = () => {
           <Box flex={1}>
             <Input
               label="Data"
+              formatTo="date"
+              keyboardType="numeric"
+              maxLength={10}
               value={state?.date}
               onChangeText={(text) =>
                 dispatch({
@@ -176,6 +179,9 @@ export const RegisterScreen = () => {
           <Box flex={1}>
             <Input
               label="Hora"
+              maxLength={5}
+              formatTo="time"
+              keyboardType="numeric"
               value={state?.hour}
               onChangeText={(text) =>
                 dispatch({

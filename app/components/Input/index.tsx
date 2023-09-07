@@ -9,11 +9,20 @@ import {
 import { TextInput, TextInputProps } from "react-native";
 import * as Styled from "./styles";
 import { useTheme } from "styled-components/native";
+import { formatter } from "../../shared/utils/formatter";
+
+type FormatTo = "date" | "time";
 
 interface InputProps extends TextInputProps {
   label?: string;
   multilineHeight?: number;
+  formatTo?: FormatTo;
 }
+
+const formatters: Record<FormatTo, (value: string) => string> = {
+  date: formatter.toDate,
+  time: formatter.toTime,
+};
 
 export const Input = forwardRef((props: InputProps, ref: Ref<TextInput>) => {
   const {
@@ -21,6 +30,8 @@ export const Input = forwardRef((props: InputProps, ref: Ref<TextInput>) => {
     label,
     multiline = false,
     multilineHeight = 120,
+    formatTo,
+    value,
     ...rest
   } = props;
 
@@ -58,6 +69,7 @@ export const Input = forwardRef((props: InputProps, ref: Ref<TextInput>) => {
         <Styled.InputField
           ref={inputRef}
           {...rest}
+          value={formatTo ? formatters[formatTo](value ?? "") : value}
           selectionColor={colors["neutral-100"]}
           onFocus={(e) => {
             setIsFocused(true);
