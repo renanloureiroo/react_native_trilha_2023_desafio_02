@@ -75,11 +75,11 @@ const data: Styled.ItemProps[] = [
 export const HomeScreen = () => {
   const { bottom } = useSafeArea();
 
-  const { navigate } =
+  const { push } =
     useNavigation<NativeStackNavigationProp<AppStackParamList, "Home">>();
 
   const handleNavigateForNewRegister = useCallback(() => {
-    navigate("ResgisterStack", { screen: "Register" });
+    push("ResgisterStack", { screen: "Register" });
   }, []);
 
   useEffect(() => {

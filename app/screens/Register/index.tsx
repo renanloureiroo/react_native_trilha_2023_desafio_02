@@ -103,7 +103,8 @@ export const RegisterScreen = () => {
       hour,
       isDiet,
     };
-    const registers = await storage.get("@diet:registers");
+    let registers = await storage.get("@diet:registers");
+    registers = registers ?? [];
     await storage.save("@diet:registers", [...registers, data]);
     navigateToSuccessScreen();
   }, [state]);
