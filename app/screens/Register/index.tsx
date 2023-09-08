@@ -164,6 +164,7 @@ export const RegisterScreen = () => {
             <Input
               label="Data"
               value={state?.date}
+              placeholder="dd/mm/aaaa"
               onChangeText={(text) =>
                 dispatch({
                   type: "SET_DATE",
@@ -176,6 +177,7 @@ export const RegisterScreen = () => {
           <Box flex={1}>
             <Input
               label="Hora"
+              placeholder="hh:mm"
               value={state?.hour}
               onChangeText={(text) =>
                 dispatch({

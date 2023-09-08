@@ -5,7 +5,9 @@ import { RegisterSuccessScreen } from "../screens/RegisterSucess";
 
 export type RegisterStackParamList = {
   Register: undefined;
-  RegisterSuccess: undefined;
+  RegisterSuccess: {
+    isDiet?: boolean;
+  };
 };
 
 const { Navigator, Screen } =
