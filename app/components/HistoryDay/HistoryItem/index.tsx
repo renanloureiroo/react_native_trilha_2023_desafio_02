@@ -7,21 +7,21 @@ import { Text } from "../../Text";
 interface HistoryItemProps {
   data: {
     hour: string;
-    title: string;
+    name: string;
     isPositive?: boolean;
   };
 }
 
 export const HistoryItem: FC<HistoryItemProps> = (props) => {
   const {
-    data: { hour, title, isPositive = false },
+    data: { hour, name, isPositive = false },
   } = props;
   return (
     <Styled.Root>
       <Text text={hour} />
       <Styled.Divider />
 
-      <Styled.Title text={title} color="neutral-200" size="x-md" />
+      <Styled.Title text={name} color="neutral-200" size="x-md" />
 
       <Styled.CategoryIndicator isPositive={isPositive} />
     </Styled.Root>

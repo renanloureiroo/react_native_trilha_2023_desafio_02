@@ -6,7 +6,7 @@ import { RegisterSuccessScreen } from "../screens/RegisterSucess";
 export type RegisterStackParamList = {
   Register: undefined;
   RegisterSuccess: {
-    isDiet?: boolean;
+    isDiet: boolean;
   };
 };
 

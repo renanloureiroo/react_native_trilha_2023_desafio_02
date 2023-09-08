@@ -8,10 +8,11 @@ import { Text } from "../Text";
 interface HeaderProps {
   variant?: "default" | "home";
   title?: string;
+  onPressLeftAction?: () => void;
 }
 
 export const Header: FC<HeaderProps> = (props) => {
-  const { variant = "default", title } = props;
+  const { variant = "default", title, onPressLeftAction } = props;
   if (variant === "home") {
     return (
       <Styled.Root variant={variant}>
@@ -28,7 +29,7 @@ export const Header: FC<HeaderProps> = (props) => {
           name="arrow-left"
           color="neutral-200"
           size={24}
-          onPressAction={() => console.log("Back")}
+          onPressAction={onPressLeftAction}
         />
       </Box>
       <Text text={title} color="neutral-100" size="lg" weight="bold" />

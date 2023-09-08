@@ -1,4 +1,4 @@
-import { useEffect, useCallback } from "react";
+import { useEffect, useCallback, useState } from "react";
 
 import * as Styled from "./styles";
 import { Header } from "../../components/Header";
@@ -8,72 +8,30 @@ import { Text } from "../../components/Text";
 import { Box } from "../../components/Box";
 import { Banner } from "../../components/Banner";
 import { HistoryDay } from "../../components/HistoryDay";
-import { FlatList, View } from "react-native";
+
 import { useSafeArea } from "../../shared/hooks/useSafeArea";
-import { NavigationProp, useNavigation } from "@react-navigation/native";
+import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import {
   NativeStackNavigationProp,
   NativeStackNavigatorProps,
 } from "@react-navigation/native-stack/lib/typescript/src/types";
 import { AppStackParamList } from "../../navigator/AppStack";
 import { storage } from "../../shared/services/storage";
+import { useRegistersContext } from "../../shared/hooks/useRegistersContext";
 
-const data: Styled.ItemProps[] = [
-  {
-    date: "12.08.22",
-    history: [
-      {
-        hour: "12:00",
-        title: "X-tudo",
-        isPositive: false,
-      },
-      {
-        hour: "15:00",
-        title: "Iorgute",
-        isPositive: true,
-      },
-      {
-        hour: "16:00",
-        title: "X-tudo",
-        isPositive: false,
-      },
-      {
-        hour: "20:00",
-        title: "Iorgute",
-        isPositive: true,
-      },
-    ],
-  },
-  {
-    date: "13.08.22",
-    history: [
-      {
-        hour: "12:00",
-        title: "X-tudo",
-        isPositive: false,
-      },
-      {
-        hour: "15:00",
-        title: "Iorgute",
-        isPositive: true,
-      },
-
-      {
-        hour: "16:00",
-        title: "X-tudo",
-        isPositive: false,
-      },
-      {
-        hour: "20:00",
-        title: "Iorgute",
-        isPositive: true,
-      },
-    ],
-  },
-];
+type Register = {
+  date: string;
+  name: string;
+  description: string;
+  hour: string;
+  isPositive: boolean;
+};
 
 export const HomeScreen = () => {
+  const [firstRender, setFirstRender] = useState<boolean>(true);
   const { bottom } = useSafeArea();
+
+  const { registers, refreshRegisters } = useRegistersContext();
 
   const { push } =
     useNavigation<NativeStackNavigationProp<AppStackParamList, "Home">>();
@@ -82,14 +40,21 @@ export const HomeScreen = () => {
     push("ResgisterStack", { screen: "Register" });
   }, []);
 
-  useEffect(() => {
-    const fetch = async () => {
-      const value = await storage.get("@diet:registers");
-      console.log(value);
-    };
+  const data = Object.keys(registers).map((date) => ({
+    date,
+    history: registers[date],
+  }));
 
-    fetch();
-  }, []);
+  useFocusEffect(
+    useCallback(() => {
+      if (firstRender) {
+        setFirstRender(false);
+        return;
+      }
+      refreshRegisters();
+    }, [firstRender])
+  );
+
   return (
     <Screen paddingHorizontal={24} justifyContent="flex-start">
       <Box marginTop={16} marginBottom={24}>

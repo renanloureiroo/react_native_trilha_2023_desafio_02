@@ -3,11 +3,11 @@ import { Box } from "../Box";
 import { Text } from "../Text";
 import { HistoryItem } from "./HistoryItem";
 
-interface HistoryDayProps {
+export interface HistoryDayProps {
   date: string;
   history?: {
     hour: string;
-    title: string;
+    name: string;
     isPositive: boolean;
   }[];
 }

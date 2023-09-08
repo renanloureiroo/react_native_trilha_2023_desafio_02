@@ -12,6 +12,7 @@ import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { RegisterStackParamList } from "../../navigator/RegisterStack";
 import { storage } from "../../shared/services/storage";
 import { Keyboard } from "react-native";
+import { AppStackParamList } from "../../navigator/AppStack";
 
 type StateType = {
   name: string;
@@ -77,13 +78,33 @@ export const RegisterScreen = () => {
   });
   const { bottom, top } = useSafeArea();
 
-  const { replace } =
+  const { replace, goBack } =
     useNavigation<
       NativeStackNavigationProp<RegisterStackParamList, "Register">
     >();
 
-  const navigateToSuccessScreen = () => {
-    replace("RegisterSuccess");
+  const validateForm = (values: StateType) => {
+    const { name, description, date, hour, isDiet } = values;
+
+    if (!name || !description || !date || !hour || isDiet === null) {
+      return false;
+    }
+
+    if (!/^\d{2}\/\d{2}\/\d{4}$/.test(date)) {
+      return false;
+    }
+
+    if (!/^\d{2}:\d{2}$/.test(hour)) {
+      return false;
+    }
+
+    return true;
+  };
+
+  const navigateToSuccessScreen = (isDietParam: boolean) => {
+    replace("RegisterSuccess", {
+      isDiet: isDietParam,
+    });
   };
 
   const handleIsDiet = useCallback((value: boolean) => {
@@ -106,8 +127,19 @@ export const RegisterScreen = () => {
     let registers = await storage.get("@diet:registers");
     registers = registers ?? [];
     await storage.save("@diet:registers", [...registers, data]);
-    navigateToSuccessScreen();
+    const isValidForm = validateForm(state);
+
+    if (!isValidForm) {
+      return;
+    }
+
+    navigateToSuccessScreen(isDiet as boolean);
   }, [state]);
+
+  const handleGoBack = useCallback(() => {
+    goBack();
+  }, []);
+
   return (
     <Screen safeAreaEdges={["bottom"]} backgroundColor="neutral-900">
       <Box
@@ -116,7 +148,7 @@ export const RegisterScreen = () => {
         paddingTop={top}
         bg="neutral-500"
       >
-        <Header title="Nova refeição" />
+        <Header title="Nova refeição" onPressLeftAction={handleGoBack} />
       </Box>
       <Box
         scroll

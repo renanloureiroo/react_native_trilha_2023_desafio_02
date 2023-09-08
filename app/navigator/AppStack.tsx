@@ -1,11 +1,9 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { HomeScreen } from "../screens";
 import { useTheme } from "styled-components/native";
-import {
-  NavigationProp,
-  NavigatorScreenParams,
-} from "@react-navigation/native";
+import { NavigatorScreenParams } from "@react-navigation/native";
 import { RegisterStack, RegisterStackParamList } from "./RegisterStack";
+import { useRegistersContext } from "../shared/hooks/useRegistersContext";
 
 export type AppStackParamList = {
   Home: undefined;
@@ -16,6 +14,10 @@ const { Navigator, Screen } = createNativeStackNavigator<AppStackParamList>();
 
 export const AppStack = () => {
   const { colors } = useTheme();
+  const { hydrated } = useRegistersContext();
+
+  if (!hydrated) return null;
+
   return (
     <Navigator
       screenOptions={{
