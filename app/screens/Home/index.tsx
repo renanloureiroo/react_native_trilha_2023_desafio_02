@@ -1,13 +1,15 @@
 import { useEffect, useCallback, useState } from "react";
 
 import * as Styled from "./styles";
-import { Header } from "../../components/Header";
-import { Button } from "../../components/Button";
-import { Screen } from "../../components/Screen";
-import { Text } from "../../components/Text";
-import { Box } from "../../components/Box";
-import { Banner } from "../../components/Banner";
-import { HistoryDay } from "../../components/HistoryDay";
+import {
+  Header,
+  Button,
+  HistoryDay,
+  Banner,
+  Screen,
+  Box,
+  Text,
+} from "../../components";
 
 import { useSafeArea } from "../../shared/hooks/useSafeArea";
 import { useFocusEffect, useNavigation } from "@react-navigation/native";

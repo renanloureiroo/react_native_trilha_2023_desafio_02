@@ -8,14 +8,13 @@ import {
 } from "react";
 import { storage } from "../shared/services/storage";
 
-type Register = {
+export type Register = {
   date: string;
   name: string;
   description: string;
   hour: string;
   isPositive: boolean;
 };
-
 type Registers = Record<string, Register[]>;
 
 interface RegistersContextProps {

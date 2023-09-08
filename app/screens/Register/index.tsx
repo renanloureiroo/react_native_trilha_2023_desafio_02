@@ -1,18 +1,21 @@
-import { useReducer, useState, useCallback } from "react";
-import { Box } from "../../components/Box";
-import { Header } from "../../components/Header";
-import { Input } from "../../components/Input";
-import { Screen } from "../../components/Screen";
-import { Select } from "../../components/Select";
-import { Text } from "../../components/Text";
-import { Button } from "../../components/Button";
+import { useReducer, useCallback } from "react";
+
 import { useSafeArea } from "../../shared/hooks/useSafeArea";
 import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import { RegisterStackParamList } from "../../navigator/RegisterStack";
 import { storage } from "../../shared/services/storage";
 import { Keyboard } from "react-native";
-import { AppStackParamList } from "../../navigator/AppStack";
+import type { RegisterStackParamList } from "../../navigator/RegisterStack";
+import type { Register } from "../../context/RegistersContext";
+import {
+  Button,
+  Header,
+  Input,
+  Screen,
+  Text,
+  Box,
+  Select,
+} from "../../components";
 
 type StateType = {
   name: string;
@@ -124,7 +127,7 @@ export const RegisterScreen = () => {
       hour,
       isDiet,
     };
-    let registers = await storage.get("@diet:registers");
+    let registers = await storage.get<Register[]>("@diet:registers");
     registers = registers ?? [];
     await storage.save("@diet:registers", [...registers, data]);
     const isValidForm = validateForm(state);

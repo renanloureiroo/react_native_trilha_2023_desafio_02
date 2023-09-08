@@ -1,14 +1,13 @@
 import { useCallback } from "react";
-import { Screen } from "../../components/Screen";
-import { Text } from "../../components/Text";
+import { Screen, Button, Box, Text } from "../../components";
+
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 
-import { Button } from "../../components/Button";
-import { AppStackParamList } from "../../navigator/AppStack";
+import type { AppStackParamList } from "../../navigator/AppStack";
 import { RouteProp, useNavigation, useRoute } from "@react-navigation/native";
 import * as Styled from "./styles";
-import { Box } from "../../components/Box";
-import { RegisterStackParamList } from "../../navigator/RegisterStack";
+
+import type { RegisterStackParamList } from "../../navigator/RegisterStack";
 
 const IlustrationYes = require("../../../assets/images/ilustration-yes.png");
 const IlustrationNo = require("../../../assets/images/ilustration-no.png");
