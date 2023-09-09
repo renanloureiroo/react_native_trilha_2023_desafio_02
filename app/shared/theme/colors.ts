@@ -15,4 +15,6 @@ export const colors = {
   "secondary-100": "#F4E6E7",
   "secondary-200": "#F3BABD",
   "secondary-300": "#BF3B44",
+
+  overlay: "rgba(0, 0, 0, 0.5)",
 };
