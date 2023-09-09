@@ -1,12 +1,12 @@
-import { useReducer, useCallback } from "react";
+import { useReducer, useCallback, useState, useEffect } from "react";
 
 import { useSafeArea } from "../../shared/hooks/useSafeArea";
-import { useNavigation } from "@react-navigation/native";
+import { RouteProp, useNavigation, useRoute } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { storage } from "../../shared/services/storage";
 import { Keyboard } from "react-native";
 import type { RegisterStackParamList } from "../../navigator/RegisterStack";
-import type { Register } from "../../context/RegistersContext";
+import type { Register, Registers } from "../../context/RegistersContext";
 import {
   Button,
   Header,
@@ -15,14 +15,18 @@ import {
   Text,
   Box,
   Select,
+  RegisterScreenComponent,
+  Dialog,
 } from "../../components";
+import { dateProvider } from "../../shared/utils/date";
+import { useRegistersContext } from "../../shared/hooks/useRegistersContext";
 
 type StateType = {
   name: string;
   description: string;
   date: string;
   hour: string;
-  isDiet: boolean | null;
+  isPositive: boolean | null;
 };
 
 type ActionType =
@@ -63,7 +67,7 @@ const reducer = (state: StateType, action: ActionType) => {
     case "SET_IS_DIET":
       return {
         ...state,
-        isDiet: payload,
+        isPositive: payload,
       };
 
     default:
@@ -72,14 +76,28 @@ const reducer = (state: StateType, action: ActionType) => {
 };
 
 export const RegisterScreen = () => {
+  const { params } = useRoute<RouteProp<RegisterStackParamList, "Register">>();
+
+  const isEdit = !!params;
+
   const [state, dispatch] = useReducer(reducer, {
-    name: "",
-    description: "",
-    date: "",
-    hour: "",
-    isDiet: null,
+    name: params?.name ?? "",
+    description: params?.description ?? "",
+    date:
+      params?.date ??
+      dateProvider.format({
+        date: new Date(),
+      }),
+    hour:
+      params?.hour ??
+      dateProvider.format({
+        date: new Date(),
+        format: "HH:mm",
+      }),
+    isPositive: params?.isPositive ?? null,
   });
-  const { bottom, top } = useSafeArea();
+
+  const { updateRegister } = useRegistersContext();
 
   const { replace, goBack } =
     useNavigation<
@@ -87,9 +105,9 @@ export const RegisterScreen = () => {
     >();
 
   const validateForm = (values: StateType) => {
-    const { name, description, date, hour, isDiet } = values;
+    const { name, description, date, hour, isPositive } = values;
 
-    if (!name || !description || !date || !hour || isDiet === null) {
+    if (!name || !description || !date || !hour || isPositive === null) {
       return false;
     }
 
@@ -109,6 +127,13 @@ export const RegisterScreen = () => {
       isDiet: isDietParam,
     });
   };
+  const navigateToShowRegisterScreen = () => {
+    replace("RegisterShow", {
+      name: state.name,
+      date: state.date,
+      hour: state.hour,
+    });
+  };
 
   const handleIsDiet = useCallback((value: boolean) => {
     dispatch({
@@ -119,24 +144,44 @@ export const RegisterScreen = () => {
 
   const handleCreateRegister = useCallback(async () => {
     Keyboard.dismiss();
-    const { name, description, date, hour, isDiet } = state;
+    const { name, description, date, hour, isPositive } = state;
     const data = {
       name,
       description,
       date,
       hour,
-      isDiet,
+      isPositive,
     };
-    let registers = await storage.get<Register[]>("@diet:registers");
-    registers = registers ?? [];
-    await storage.save("@diet:registers", [...registers, data]);
     const isValidForm = validateForm(state);
-
     if (!isValidForm) {
       return;
     }
 
-    navigateToSuccessScreen(isDiet as boolean);
+    if (isEdit) {
+      console.log("EDIT", data);
+      await updateRegister({
+        register: data as Register,
+        index: params?.index as number,
+      });
+      navigateToShowRegisterScreen();
+      return;
+    }
+    let registers = await storage.get<Registers>("@diet:registers");
+    const registersAlreadyExistsInDate = registers?.[date];
+
+    if (registersAlreadyExistsInDate) {
+      await storage.save("@diet:registers", {
+        ...registers,
+        [date]: [...registersAlreadyExistsInDate, data],
+      });
+    } else {
+      await storage.save("@diet:registers", {
+        ...registers,
+        [date]: [data],
+      });
+    }
+
+    navigateToSuccessScreen(isPositive as boolean);
   }, [state]);
 
   const handleGoBack = useCallback(() => {
@@ -144,130 +189,117 @@ export const RegisterScreen = () => {
   }, []);
 
   return (
-    <Screen safeAreaEdges={["bottom"]} backgroundColor="neutral-900">
-      <Box
-        paddingHorizontal={24}
-        paddingBottom={34}
-        paddingTop={top}
-        bg="neutral-500"
-      >
-        <Header title="Nova refeição" onPressLeftAction={handleGoBack} />
-      </Box>
-      <Box
-        scroll
-        flex={1}
-        bg="neutral-900"
-        borderTopLeftRadius={20}
-        borderTopRightRadius={20}
-        paddingHorizontal={24}
-        paddingTop={32}
-        top={-20}
-      >
-        <Box marginBottom={24}>
-          <Input
-            label="Nome"
-            value={state?.name}
-            onChangeText={(text) =>
-              dispatch({
-                type: "SET_NAME",
-                payload: text,
-              })
-            }
+    <RegisterScreenComponent
+      headerTitle={isEdit ? "Editar refeição" : "Nova refeição"}
+      contentScrollable
+      onPressLeftAction={handleGoBack}
+      footer={
+        <Box bg="neutral-900" paddingHorizontal={24} paddingBottom={16}>
+          <Button
+            text={isEdit ? "Salvar alterações" : "Cadastrar refeição"}
+            fullWidth
+            onPress={handleCreateRegister}
           />
         </Box>
-        <Box marginBottom={24}>
+      }
+    >
+      <Box marginBottom={24}>
+        <Input
+          label="Nome"
+          value={state?.name}
+          onChangeText={(text) =>
+            dispatch({
+              type: "SET_NAME",
+              payload: text,
+            })
+          }
+        />
+      </Box>
+      <Box marginBottom={24}>
+        <Input
+          label="Descrição"
+          multiline
+          value={state?.description}
+          onChangeText={(text) =>
+            dispatch({
+              type: "SET_DESCRIPTION",
+              payload: text,
+            })
+          }
+        />
+      </Box>
+
+      <Box
+        flexDirection="row"
+        alignItems="center"
+        justifyContent="space-between"
+        gap={16}
+      >
+        <Box flex={1}>
           <Input
-            label="Descrição"
-            multiline
-            value={state?.description}
+            label="Data"
+            formatTo="date"
+            keyboardType="numeric"
+            maxLength={10}
+            value={state?.date}
+            placeholder="dd/mm/aaaa"
             onChangeText={(text) =>
               dispatch({
-                type: "SET_DESCRIPTION",
+                type: "SET_DATE",
                 payload: text,
               })
             }
           />
         </Box>
 
+        <Box flex={1}>
+          <Input
+            label="Hora"
+            maxLength={5}
+            formatTo="time"
+            keyboardType="numeric"
+            placeholder="hh:mm"
+            value={state?.hour}
+            onChangeText={(text) =>
+              dispatch({
+                type: "SET_HOUR",
+                payload: text,
+              })
+            }
+          />
+        </Box>
+      </Box>
+      <Box marginTop={24} gap={4}>
+        <Text text="Está dentro da dieta?" />
         <Box
           flexDirection="row"
           alignItems="center"
           justifyContent="space-between"
           gap={16}
+          marginBottom={40}
         >
-          <Box flex={1}>
-            <Input
-              label="Data"
-              formatTo="date"
-              keyboardType="numeric"
-              maxLength={10}
-              value={state?.date}
-              placeholder="dd/mm/aaaa"
-              onChangeText={(text) =>
-                dispatch({
-                  type: "SET_DATE",
-                  payload: text,
-                })
-              }
-            />
-          </Box>
-
-          <Box flex={1}>
-            <Input
-              label="Hora"
-              maxLength={5}
-              formatTo="time"
-              keyboardType="numeric"
-              placeholder="hh:mm"
-              value={state?.hour}
-              onChangeText={(text) =>
-                dispatch({
-                  type: "SET_HOUR",
-                  payload: text,
-                })
-              }
-            />
-          </Box>
-        </Box>
-        <Box marginTop={24} gap={4}>
-          <Text text="Está dentro da dieta?" />
-          <Box
-            flexDirection="row"
-            alignItems="center"
-            justifyContent="space-between"
-            gap={16}
-            marginBottom={40}
-          >
-            <Select
-              type="primary"
-              selected={state?.isDiet === true}
-              option={{
-                id: "sim",
-                label: "Sim",
-                value: "sim",
-              }}
-              onPress={() => handleIsDiet(true)}
-            />
-            <Select
-              type="secondary"
-              selected={state?.isDiet === false}
-              option={{
-                id: "nao",
-                label: "Não",
-                value: "nao",
-              }}
-              onPress={() => handleIsDiet(false)}
-            />
-          </Box>
+          <Select
+            type="primary"
+            selected={state?.isPositive === true}
+            option={{
+              id: "sim",
+              label: "Sim",
+              value: "sim",
+            }}
+            onPress={() => handleIsDiet(true)}
+          />
+          <Select
+            type="secondary"
+            selected={state?.isPositive === false}
+            option={{
+              id: "nao",
+              label: "Não",
+              value: "nao",
+            }}
+            onPress={() => handleIsDiet(false)}
+          />
         </Box>
       </Box>
-      <Box bg="neutral-900" paddingHorizontal={24} paddingBottom={bottom + 16}>
-        <Button
-          text="Cadastrar refeição"
-          fullWidth
-          onPress={handleCreateRegister}
-        />
-      </Box>
-    </Screen>
+    </RegisterScreenComponent>
   );
 };
