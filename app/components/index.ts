@@ -1,4 +1,4 @@
-import { Input } from "./Input";
+export * from "./Input";
 export * from "./Avatar";
 export * from "./Button";
 export * from "./Banner";
@@ -9,5 +9,5 @@ export * from "./Icon";
 export * from "./Screen";
 export * from "./Select";
 export * from "./Text";
-
-export { Input };
+export * from "./RegisterScreenComponent";
+export * from "./Dialog";

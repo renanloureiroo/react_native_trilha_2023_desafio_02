@@ -17,6 +17,7 @@ export const Avatar: FC<AvatarProps> = (props) => {
         resizeMode="cover"
         width={40}
         height={40}
+        fadeDuration={100}
       />
     </Styled.Root>
   );

@@ -19,12 +19,7 @@ interface ButtonLabelProps {
   variant: Variant;
 }
 
-export const Root = styled(Pressable).attrs<RootProps>({
-  android_ripple: {
-    color: "rbga(0,0,0,0.2)",
-    foreground: true,
-  },
-})`
+export const Root = styled(Pressable).attrs<RootProps>({})`
   ${({ fullWidth }) => css`
     border-radius: 6px;
     overflow: hidden;
@@ -51,9 +46,10 @@ export const Container = styled(Box)<ButtonProps>`
       ? theme.colors["neutral-200"]
       : "transparent"};
 
-    border: ${variant === "outline"
-      ? `1px solid ${theme.colors["neutral-100"]}`
-      : "none"};
+    border-width: 1px;
+    border-color: ${variant === "outline"
+      ? theme.colors["neutral-100"]
+      : "transparent"};
   `}
 `;
 

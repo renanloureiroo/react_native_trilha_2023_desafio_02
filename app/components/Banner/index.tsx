@@ -7,10 +7,11 @@ import * as Styled from "./styles";
 interface BannerProps {
   isPositive?: boolean;
   percentage: number;
+  onPressAction?: () => void;
 }
 
 export const Banner = (props: BannerProps) => {
-  const { isPositive = false, percentage } = props;
+  const { isPositive = false, percentage, onPressAction } = props;
   return (
     <Styled.Root isPositive={isPositive}>
       <Styled.IconWrapper>
@@ -18,7 +19,7 @@ export const Banner = (props: BannerProps) => {
           name="arrow-up-right"
           color={isPositive ? "primary-300" : "secondary-300"}
           androidRippleColor={isPositive ? "primary-300" : "secondary-300"}
-          onPressAction={() => console.log("clique")}
+          onPressAction={onPressAction}
         />
       </Styled.IconWrapper>
 

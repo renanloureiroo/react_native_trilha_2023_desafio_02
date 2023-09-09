@@ -1,12 +1,13 @@
 import { css, styled } from "styled-components/native";
 import { Box } from "../../Box";
 import { Text } from "../../Text";
+import { Pressable } from "react-native";
 
 interface CategoryIndicatorProps {
   isPositive: boolean;
 }
 
-export const Root = styled(Box)`
+export const Root = styled.Pressable`
   ${({ theme }) => css`
     height: 49px;
     border-radius: 6px;
@@ -17,6 +18,7 @@ export const Root = styled(Box)`
     align-items: center;
     width: 100%;
     padding: ${theme.spacing[3]}px;
+    position: relative;
   `}
 `;
 

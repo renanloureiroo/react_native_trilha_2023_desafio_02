@@ -2,10 +2,8 @@ import { PressableProps } from "react-native";
 import * as Styled from "./styles";
 import { FC } from "react";
 import { Icon, Icons } from "../Icon";
-import { Text } from "../Text";
-import { Box } from "../Box";
 
-interface ButtonProps extends PressableProps {
+export interface ButtonProps extends PressableProps {
   text: string;
   icon?: Icons;
   variant?: "fill" | "outline";
@@ -15,7 +13,14 @@ interface ButtonProps extends PressableProps {
 export const Button: FC<ButtonProps> = (props) => {
   const { text, icon, variant = "fill", fullWidth = false, ...rest } = props;
   return (
-    <Styled.Root fullWidth={fullWidth} {...rest}>
+    <Styled.Root
+      fullWidth={fullWidth}
+      android_ripple={{
+        color: variant === "fill" ? "rbga(255,255,255,0.5)" : "rbga(0,0,0,0.2)",
+        foreground: true,
+      }}
+      {...rest}
+    >
       {({ pressed }) => (
         <Styled.Container
           pressed={pressed}
