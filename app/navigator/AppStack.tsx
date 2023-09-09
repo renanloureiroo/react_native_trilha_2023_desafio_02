@@ -4,9 +4,11 @@ import { useTheme } from "styled-components/native";
 import { NavigatorScreenParams } from "@react-navigation/native";
 import { RegisterStack, RegisterStackParamList } from "./RegisterStack";
 import { useRegistersContext } from "../shared/hooks/useRegistersContext";
+import { StatisticsScreen } from "../screens/Statitics";
 
 export type AppStackParamList = {
   Home: undefined;
+  Statistics: undefined;
   ResgisterStack: NavigatorScreenParams<RegisterStackParamList>;
 };
 
@@ -29,6 +31,7 @@ export const AppStack = () => {
     >
       <Screen name="Home" component={HomeScreen} />
       <Screen name="ResgisterStack" component={RegisterStack} />
+      <Screen name="Statistics" component={StatisticsScreen} />
     </Navigator>
   );
 };

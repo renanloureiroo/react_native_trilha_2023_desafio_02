@@ -2,11 +2,24 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { RegisterScreen } from "../screens/Register";
 import { useTheme } from "styled-components/native";
 import { RegisterSuccessScreen } from "../screens/RegisterSucess";
+import { RegisterShowScreen } from "../screens/RegisterShow";
 
 export type RegisterStackParamList = {
-  Register: undefined;
+  Register?: {
+    index: number;
+    date: string;
+    hour: string;
+    name: string;
+    description: string;
+    isPositive: boolean;
+  };
   RegisterSuccess: {
     isDiet: boolean;
+  };
+  RegisterShow: {
+    date: string;
+    hour: string;
+    name: string;
   };
 };
 
@@ -28,6 +41,7 @@ export const RegisterStack = () => {
     >
       <Screen name="Register" component={RegisterScreen} />
       <Screen name="RegisterSuccess" component={RegisterSuccessScreen} />
+      <Screen name="RegisterShow" component={RegisterShowScreen} />
     </Navigator>
   );
 };
